@@ -1,16 +1,16 @@
 import React from 'react';
 
-export default function SettingInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; }) {
+export default function SettingInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; id: string; }) {
     return (
         <div>
             <h2 className='label-wrapper'>
-                <label htmlFor='login-input' className='todo-label'>
+                <label htmlFor={`${props.id}-input`} className='todo-label'>
                     {props.label}
                 </label>
             </h2>
             <input
                 type='text'
-                id='login-input'
+                id={`${props.id}-input`}
                 className='todo-text'
                 name='text'
                 autoComplete='off'

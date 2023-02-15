@@ -10,6 +10,10 @@ export default function App() {
     const [reviewer, setReviewer] = useState({ state: false, data: { login: '', avatar_url: '' }});
     const [isExistingReviewer, setExistingReviewer] = useState({ state: true, message: '' });
 
+    const [blackListData, setBlackListData] = useState([]);
+
+    // function getBlackList() {}
+
     // Добавить визуальное отоброжаение поиска ревьюера
 
     async function getReviewer(data: { login: string; repository: string; }) {
@@ -42,7 +46,7 @@ export default function App() {
         const receivedReviewers: Array<{ login: string; avatar_url: string; }> = [];
 
         for (const contributor in contributors) {
-            if (contributor !== data.login) {
+            if (contributor.toLowerCase() !== data.login.toLowerCase()) {
                 receivedReviewers.push(contributors[contributor]);
             } else {
                 setUser({ state: true, data: contributors[contributor]});
@@ -61,7 +65,11 @@ export default function App() {
     return (
         <div className='todoapp stack-large'>
             <h1>Reviewer Searcher</h1>
-            <Settings getReviewer={getReviewer} />
+            <Settings
+                blackListData={blackListData}
+                setBlackListData={setBlackListData}
+                getReviewer={getReviewer}
+            />
             {user.state ? <UserView login={user.data.login} avatar_url={user.data.avatar_url} /> : null}
             <p>{isExistingUser.state ? null : isExistingUser.message}</p>
             {reviewer.state ? <ReviewerSection login={reviewer.data.login} avatar_url={reviewer.data.avatar_url} /> : null}
