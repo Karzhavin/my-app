@@ -13,12 +13,9 @@ export default function App() {
     const [blackListData, setBlackListData] = useState([]);
 
     if (localStorage.getItem('blackListData') && localStorage.getItem('blackListData') !== JSON.stringify(blackListData)) {
-        console.log(localStorage.getItem('blackListData'));
         const localStorageData = `${localStorage.getItem('blackListData')}`;
         setBlackListData(JSON.parse(localStorageData));
     }
-
-    // Добавить визуальное отоброжаение поиска ревьюера
 
     async function getReviewer(data: { login: string; repository: string; }) {
 
@@ -51,7 +48,9 @@ export default function App() {
 
         for (const contributor in contributors) {
             if (contributor.toLowerCase() !== data.login.toLowerCase()) {
-                receivedReviewers.push(contributors[contributor]);
+                if (!blackListData.some((item: string) => item.toLowerCase() === contributor.toLowerCase())) {
+                    receivedReviewers.push(contributors[contributor]);
+                }
             } else {
                 setUser({ state: true, data: contributors[contributor]});
             }
