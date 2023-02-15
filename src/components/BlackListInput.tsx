@@ -39,6 +39,12 @@ export default function SettingInput(props: { label: string; value: string; hand
                         alert('the value already exists');
                     } else {
                         props.setBlackListData([...props.blackListData, props.value]);
+                        try {
+                            localStorage.setItem('blackListData', JSON.stringify([...props.blackListData, props.value]));
+                        } catch (error) {
+                            alert(error);
+                            localStorage.clear();
+                        }
                     }
                 }}
             >

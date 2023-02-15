@@ -7,7 +7,16 @@ export default function BlockReviewer(props: { reviewerName: string; blackListDa
             <button 
                 type='button'
                 className='btn'
-                onClick={() => props.setBlackListData(props.blackListData.filter((item: string) => item !== props.reviewerName))}
+                onClick={() => {
+                    const updateBlackListData = props.blackListData.filter((item: string) => item !== props.reviewerName);
+                    props.setBlackListData(updateBlackListData);
+                    try {
+                        localStorage.setItem('blackListData', JSON.stringify(updateBlackListData));
+                    } catch (error) {
+                        alert(error);
+                        localStorage.clear();
+                    }
+                }}
             >
                 x
             </button>

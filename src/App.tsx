@@ -12,7 +12,11 @@ export default function App() {
 
     const [blackListData, setBlackListData] = useState([]);
 
-    // function getBlackList() {}
+    if (localStorage.getItem('blackListData') && localStorage.getItem('blackListData') !== JSON.stringify(blackListData)) {
+        console.log(localStorage.getItem('blackListData'));
+        const localStorageData = `${localStorage.getItem('blackListData')}`;
+        setBlackListData(JSON.parse(localStorageData));
+    }
 
     // Добавить визуальное отоброжаение поиска ревьюера
 

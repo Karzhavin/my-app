@@ -15,9 +15,7 @@ export default function Settings(props: { blackListData: Array<string>; setBlack
     function getLocalStorageData(storageKey: string, stateData: string, setStateData: Function) {
         if (localStorage.getItem(storageKey) && localStorage.getItem(storageKey) !== stateData) {
             const localStorageData = `${localStorage.getItem(storageKey)}`;
-            if (localStorageData !== stateData) {
-                setStateData(localStorageData);
-            }
+            setStateData(localStorageData);
         }
     }
 
@@ -38,7 +36,8 @@ export default function Settings(props: { blackListData: Array<string>; setBlack
         try {
             localStorage.setItem(storageKey, `${input}`);
         } catch (error) {
-            localStorage.clear()
+            alert(error);
+            localStorage.clear();
         }
     }
 
