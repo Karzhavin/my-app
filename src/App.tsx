@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SearchSettings from './components/SearchSettings';
 import OutputData from './components/OutputData';
 
