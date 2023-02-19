@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SettingInput from './SettingInput';
 import BlackListInput from './BlackListInput';
 
-export default function Settings(props: { blackListData: Array<string>; setBlackListData: Function; getReviewer: (data: { login: string; repository: string; }) => void; }) {
+export default function SearchSettings(props: { blackListData: Array<string>; setBlackListData: Function; getReviewer: (data: { login: string; repository: string; }) => void; }) {
     const [isOpening, setOpening] = useState(false);
     const [login, setLogin] = useState('');
     const [repository, setRepository] = useState('');
@@ -48,7 +48,7 @@ export default function Settings(props: { blackListData: Array<string>; setBlack
     }
     const closingTemplate = null;
     const openingTemplate = (
-        <div className='stack-large'>
+        <div className='search-settings'>
             <SettingInput
                 id='login'
                 label='Login:'
@@ -77,10 +77,10 @@ export default function Settings(props: { blackListData: Array<string>; setBlack
         <form onSubmit={handleSubmit}>
             <button 
                 type='button'
-                className='btn btn__primary btn__lg'
+                className='btn btn__lg'
                 onClick={() => setOpening(!isOpening)}
             >
-                {isOpening ? 'Close' : 'Get Started'}
+                {isOpening ? 'End Search' : 'Get Started'}
             </button>
             {isOpening ? openingTemplate : closingTemplate}
         </form>

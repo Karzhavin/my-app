@@ -145,7 +145,7 @@ body {
     margin-top: 1.2rem;
 }
 /* END GLOBAL STYLES */
-.todoapp {
+.searchapp {
     background: #fff;
     margin: 2rem 0 4rem 0;
     padding: 1rem;
@@ -153,19 +153,19 @@ body {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2.5rem 5rem 0 rgba(0, 0, 0, 0.1);
 }
 @media screen and (min-width: 550px) {
-    .todoapp {
+    .searchapp {
         padding: 4rem;
     }
 }
-.todoapp > * {
+.searchapp > * {
     max-width: 50rem;
     margin-left: auto;
     margin-right: auto;
 }
-.todoapp > form {
+.searchapp > form {
     max-width: 100%;
 }
-.todoapp > h1 {
+.searchapp > h1 {
     display: block;
     max-width: 100%;
     text-align: center;
@@ -200,89 +200,105 @@ body {
         font-size: 2.4rem;
     }
 }
-/* Todo item styles */
-.todo {
+/* Search settings styles */
+.search-settings {
+    padding-top: 2rem;
+}
+.search-input {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    padding-bottom: 2rem;
+}
+.search-blacklist {
+    padding-bottom: 4rem;
+}
+.blacklist-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0.5rem;
+}
+.blacklist-input {
+    display: flex;
+    gap: 1rem;
+}
+.blacklist-input-btn:hover {
+    color: #90ee90;
+    border-color: #90ee90;
+}
+.blacklist-label {
+    font-size: 1.9rem;
+}
+@media screen and (min-width: 620px) {
+    .blacklist-container {
+        padding-bottom: 0.9rem;
+    }
+    .blacklist-label {
+        font-size: 2.4rem;
+    }
+}
+.list-of-blacklist {
+    display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
 }
-.todo > * {
-    flex: 0 0 100%;
+.item-of-blacklist {
+    display: flex;
+    align-items: baseline;
+    padding: 0.1rem 0.3rem 0.2rem 0.5rem;
+    border: 0.2rem solid #4d4d4d;
 }
-.todo-text {
+.item-of-blacklist__text {
+    font-size: 1.2rem;
+}
+.item-of-blacklist__remove-btn {
+    padding: 0 0.7rem;
+    padding-right: 0.3rem;
+    border: none;
+    font-size: 1.5rem;
+    text-transform: lowercase;
+}
+.item-of-blacklist__remove-btn:hover {
+    color: #ca3c3c;
+}
+@media screen and (min-width: 620px) {
+    .item-of-blacklist__text {
+        font-size: 1.5rem;
+    }
+    .item-of-blacklist__remove-btn {
+        font-size: 1.9rem;
+    }
+}
+.search-label {
+    width: auto;
+    font-weight: 700;
+}
+.search-text {
     width: 100%;
     min-height: 4.4rem;
     padding: 0.4rem 0.8rem;
     border: 2px solid #565656;
 }
-.todo-text:focus {
+.search-text:focus {
     box-shadow: inset 0 0 0 2px;
 }
-/* CHECKBOX STYLES */
-.c-cb {
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    font-weight: 400;
-    font-size: 1.6rem;
-    line-height: 1.25;
-    display: block;
-    position: relative;
-    min-height: 44px;
-    padding-left: 40px;
-    clear: left;
+/* User and Reviewer Sections styles */
+.output-data {
+    display: flex;
+    column-gap: 2rem;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
 }
-.c-cb > label::before,
-.c-cb > input[type="checkbox"] {
-    box-sizing: border-box;
-    top: -2px;
-    left: -2px;
-    width: 44px;
-    height: 44px;
+.output-image {
+    border: 0.2rem solid #4d4d4d;
 }
-.c-cb > input[type="checkbox"] {
-    -webkit-font-smoothing: antialiased;
-    cursor: pointer;
-    position: absolute;
-    z-index: 1;
+.output-data-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.data-item {
     margin: 0;
-    opacity: 0;
+    padding: 0.5rem;
 }
-.c-cb > label {
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    display: inline-block;
-    margin-bottom: 0;
-    padding: 8px 15px 5px;
-    cursor: pointer;
-    touch-action: manipulation;
-}
-.c-cb > label::before {
-    content: "";
-    position: absolute;
-    border: 2px solid currentcolor;
-    background: transparent;
-}
-.c-cb > input[type="checkbox"]:focus + label::before {
-    border-width: 4px;
-    outline: 3px dashed #228bec;
-}
-.c-cb > label::after {
-    box-sizing: content-box;
-    content: "";
-    position: absolute;
-    top: 11px;
-    left: 9px;
-    width: 18px;
-    height: 7px;
-    transform: rotate(-45deg);
-    border: solid;
-    border-width: 0 0 5px 5px;
-    border-top-color: transparent;
-    opacity: 0;
-    background: transparent;
-}
-.c-cb > input[type="checkbox"]:checked + label::after {
-    opacity: 1;
-}
+/* system message */

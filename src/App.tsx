@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import Settings from './components/Settings';
-import UserView from './components/UserView';
-import ReviewerSection from './components/ReviewerSection';
+import React, { useEffect, useState } from 'react';
+import SearchSettings from './components/SearchSettings';
+import OutputData from './components/OutputData';
 
 export default function App() {
     const [user, setUser] = useState({ state: false, data: { login: '', avatar_url: '' }});
@@ -66,17 +65,17 @@ export default function App() {
         }
     }
     return (
-        <div className='todoapp stack-large'>
+        <div className='searchapp stack-large'>
             <h1>Reviewer Searcher</h1>
-            <Settings
+            <SearchSettings
                 blackListData={blackListData}
                 setBlackListData={setBlackListData}
                 getReviewer={getReviewer}
             />
-            {user.state ? <UserView login={user.data.login} avatar_url={user.data.avatar_url} /> : null}
-            <p>{isExistingUser.state ? null : isExistingUser.message}</p>
-            {reviewer.state ? <ReviewerSection login={reviewer.data.login} avatar_url={reviewer.data.avatar_url} /> : null}
-            <p>{isExistingReviewer.state ? null : isExistingReviewer.message}</p>
+            {user.state ? <OutputData heading='User' login={user.data.login} avatar_url={user.data.avatar_url} /> : null}
+            {isExistingUser.state ? null : <p className='message'>{isExistingUser.message}</p>}
+            {reviewer.state ? <OutputData heading='Reviewer' login={reviewer.data.login} avatar_url={reviewer.data.avatar_url} /> : null}
+            {isExistingReviewer.state ? null : <p className='message'>{isExistingReviewer.message}</p>}
         </div>
     );
 }
