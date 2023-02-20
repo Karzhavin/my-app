@@ -1,6 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SettingInput from './SettingInput';
 import BlackListInput from './BlackListInput';
+
+function getLocalStorageData(storageKey: string, stateData: string, setStateData: Function) {
+    if (localStorage.getItem(storageKey) && localStorage.getItem(storageKey) !== stateData) {
+        const localStorageData = `${localStorage.getItem(storageKey)}`;
+        setStateData(localStorageData);
+    }
+}
+
+function setLocalStorageData(storageKey: string, input: string) {
+    try {
+        localStorage.setItem(storageKey, `${input}`);
+    } catch (error) {
+        alert(error);
+        localStorage.clear();
+    }
+}
 
 export default function SearchSettings(props: { blackListData: Array<string>; setBlackListData: Function; getReviewer: (data: { login: string; repository: string; }) => void; }) {
     const [isOpening, setOpening] = useState(false);
@@ -8,16 +24,12 @@ export default function SearchSettings(props: { blackListData: Array<string>; se
     const [repository, setRepository] = useState('');
     const [blackList, setBlackList] = useState('');
 
-    getLocalStorageData('login', login, setLogin);
-    getLocalStorageData('repository', repository, setRepository);
-    getLocalStorageData('blackList', blackList, setBlackList);
-
-    function getLocalStorageData(storageKey: string, stateData: string, setStateData: Function) {
-        if (localStorage.getItem(storageKey) && localStorage.getItem(storageKey) !== stateData) {
-            const localStorageData = `${localStorage.getItem(storageKey)}`;
-            setStateData(localStorageData);
-        }
-    }
+    useEffect(() => {
+        getLocalStorageData('login', login, setLogin);
+        getLocalStorageData('repository', repository, setRepository);
+        getLocalStorageData('blackList', blackList, setBlackList);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     function handleLoginInputChange(e: { target: { value: React.SetStateAction<string>; }; }) {
         setLogin(e.target.value);
@@ -32,9 +44,25 @@ export default function SearchSettings(props: { blackListData: Array<string>; se
         setLocalStorageData('blackList', `${e.target.value}`);
     }
 
-    function setLocalStorageData(storageKey: string, input: string) {
+    function addBlackListItem(reviewerName: string) {
+        if (props.blackListData.some((item) => item === reviewerName)) {
+            alert('the value already exists');
+        } else {
+            props.setBlackListData([...props.blackListData, reviewerName]);
+            try {
+                localStorage.setItem('blackListData', JSON.stringify([...props.blackListData, reviewerName]));
+            } catch (error) {
+                alert(error);
+                localStorage.clear();
+            }
+        }
+    }
+
+    function removeBlackListItem(reviewerName: string) {
+        const updateBlackListData = props.blackListData.filter((item: string) => item !== reviewerName);
+        props.setBlackListData(updateBlackListData);
         try {
-            localStorage.setItem(storageKey, `${input}`);
+            localStorage.setItem('blackListData', JSON.stringify(updateBlackListData));
         } catch (error) {
             alert(error);
             localStorage.clear();
@@ -67,6 +95,8 @@ export default function SearchSettings(props: { blackListData: Array<string>; se
                 handleChange={handleBlackListInputChange}
                 blackListData={props.blackListData}
                 setBlackListData={props.setBlackListData}
+                addBlackListItem={addBlackListItem}
+                removeBlackListItem={removeBlackListItem}
             />
             <button type='submit' className='btn btn__primary btn__lg'>
                 Search

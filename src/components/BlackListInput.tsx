@@ -1,14 +1,15 @@
 import React from 'react';
 import BlockReviewer from './BlockReviewer';
 
-export default function SettingInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; blackListData: Array<string>; setBlackListData: Function; }) {
-    const blockReviewerList = props.blackListData.map((reviewerName: string, index: number) => {
+export default function SettingInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; blackListData: Array<string>; setBlackListData: Function; addBlackListItem: Function; removeBlackListItem: Function; }) {
+    const blockReviewerList = props.blackListData.map((reviewerName: string) => {
         return (
             <BlockReviewer
-                key={index}
+                key={reviewerName}
                 reviewerName={reviewerName}
                 blackListData={props.blackListData}
                 setBlackListData={props.setBlackListData}
+                removeBlackListItem={props.removeBlackListItem}
             />
         );
     });
@@ -36,19 +37,7 @@ export default function SettingInput(props: { label: string; value: string; hand
                 <button 
                     type='button'
                     className='btn blacklist-input-btn'
-                    onClick={() => {
-                        if (props.blackListData.some((item) => item === props.value)) {
-                            alert('the value already exists');
-                        } else {
-                            props.setBlackListData([...props.blackListData, props.value]);
-                            try {
-                                localStorage.setItem('blackListData', JSON.stringify([...props.blackListData, props.value]));
-                            } catch (error) {
-                                alert(error);
-                                localStorage.clear();
-                            }
-                        }
-                    }}
+                    onClick={() => props.addBlackListItem(props.value)}
                 >
                     Add
                 </button>

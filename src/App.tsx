@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchSettings from './components/SearchSettings';
 import OutputData from './components/OutputData';
 
@@ -11,10 +11,13 @@ export default function App() {
 
     const [blackListData, setBlackListData] = useState([]);
 
+    useEffect(() => {
     if (localStorage.getItem('blackListData') && localStorage.getItem('blackListData') !== JSON.stringify(blackListData)) {
         const localStorageData = `${localStorage.getItem('blackListData')}`;
         setBlackListData(JSON.parse(localStorageData));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
     async function getReviewer(data: { login: string; repository: string; }) {
 
