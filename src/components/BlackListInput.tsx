@@ -1,15 +1,14 @@
 import React from 'react';
 import BlockReviewer from './BlockReviewer';
 
-export default function SettingInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; blackListData: Array<string>; setBlackListData: Function; addBlackListItem: Function; removeBlackListItem: Function; }) {
-    const blockReviewerList = props.blackListData.map((reviewerName: string) => {
+export default function BlacklistInput(props: { label: string; value: string; handleChange: React.ChangeEventHandler<HTMLInputElement>; blacklist: Array<string>; addBlacklistItem: Function; removeBlacklistItem: Function; }) {
+    const blockReviewerlist = props.blacklist.map((reviewerName: string) => {
         return (
             <BlockReviewer
                 key={reviewerName}
                 reviewerName={reviewerName}
-                blackListData={props.blackListData}
-                setBlackListData={props.setBlackListData}
-                removeBlackListItem={props.removeBlackListItem}
+                blacklist={props.blacklist}
+                removeBlacklistItem={props.removeBlacklistItem}
             />
         );
     });
@@ -20,7 +19,7 @@ export default function SettingInput(props: { label: string; value: string; hand
                         {props.label}
                     </label>
                 <ul className='list-of-blacklist'>
-                    {blockReviewerList}
+                    {blockReviewerlist}
                 </ul>
             </div>
             
@@ -37,7 +36,7 @@ export default function SettingInput(props: { label: string; value: string; hand
                 <button 
                     type='button'
                     className='btn blacklist-input-btn'
-                    onClick={() => props.addBlackListItem(props.value)}
+                    onClick={() => props.addBlacklistItem(props.value)}
                 >
                     Add
                 </button>
