@@ -2,7 +2,7 @@ const initialState = {
     loginInput: '',
     repositoryInput: '',
     blacklistInput: ''
-};
+}
 
 export default function settingsReducer(state = initialState, action: { type: string; payload: string; }) {
     switch (action.type) {
@@ -27,4 +27,4 @@ export default function settingsReducer(state = initialState, action: { type: st
         default:
             return state;
     }
-};
+}

@@ -41,10 +41,11 @@ const getResult = async function(data: { loginInput: string; repositoryInput: st
         reviewer.state = true;
         reviewer.data = receivedReviewers[randomNumber];
     }
+
     return {
         user: user,
         reviewer: reviewer
-    };
+    }
 }
 
 export default getResult;

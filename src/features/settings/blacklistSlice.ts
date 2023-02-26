@@ -1,6 +1,6 @@
 const initialState = {
     blacklist: []
-};
+}
 
 export default function blacklistReducer(state = initialState, action: { type: string; payload: []; }) {
     switch (action.type) {
@@ -13,4 +13,4 @@ export default function blacklistReducer(state = initialState, action: { type: s
         default:
             return state;
     }
-};
+}

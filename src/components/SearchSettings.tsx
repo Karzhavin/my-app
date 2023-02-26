@@ -85,7 +85,7 @@ export default function SearchSettings() {
             } else {
                 dispatch({ type: 'results/reviewerChanged', payload: result.reviewer });
             }
-        })()
+        })();
     }
     
     const closingTemplate = null;

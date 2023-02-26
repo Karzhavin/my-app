@@ -32,7 +32,8 @@ export default function SearchResult() {
     return (
         <div>
             {user.state ? resultItem('User', user.data.login, user.data.avatar_url) : null}
-            {reviewer.state ? resultItem('Reviewer', reviewer.data.login, reviewer.data.avatar_url) : message('Reviewer not found')}
+            {reviewer.state ? resultItem('Reviewer', reviewer.data.login, reviewer.data.avatar_url) : null}
+            {user.state && !reviewer.state ? message('Reviewer not found') : null}
         </div>
     );
 }

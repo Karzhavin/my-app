@@ -10,7 +10,7 @@ const preloadedState = {
     blacklist: {
         blacklist: []
     }
-};
+}
 
 const persistedLoginInput = localStorage.getItem('loginInput');
 const persistedRepositoryInput = localStorage.getItem('repositoryInput');
@@ -30,6 +30,6 @@ if (persistedBlacklistData) {
     preloadedState.blacklist.blacklist = JSON.parse(persistedBlacklistData);
 }
 
-const store = createStore(rootReducer, preloadedState)
+const store = createStore(rootReducer, preloadedState);
 
 export default store;
