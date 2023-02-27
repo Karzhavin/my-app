@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SettingInput from './SettingInput';
-import BlackListInput from './BlackListInput';
-
-function getLocalStorageData(storageKey: string, stateData: string, setStateData: Function) {
-    if (localStorage.getItem(storageKey) && localStorage.getItem(storageKey) !== stateData) {
-        const localStorageData = `${localStorage.getItem(storageKey)}`;
-        setStateData(localStorageData);
-    }
-}
+import BlacklistInput from './BlacklistInput';
+import getResult from '../functions/getResult';
+import { useSelector, useDispatch } from 'react-redux';
 
 function setLocalStorageData(storageKey: string, input: string) {
     try {
@@ -18,51 +13,49 @@ function setLocalStorageData(storageKey: string, input: string) {
     }
 }
 
-export default function SearchSettings(props: { blackListData: Array<string>; setBlackListData: Function; getReviewer: (data: { login: string; repository: string; }) => void; }) {
+export default function SearchSettings() {
     const [isOpening, setOpening] = useState(false);
-    const [login, setLogin] = useState('');
-    const [repository, setRepository] = useState('');
-    const [blackList, setBlackList] = useState('');
 
-    useEffect(() => {
-        getLocalStorageData('login', login, setLogin);
-        getLocalStorageData('repository', repository, setRepository);
-        getLocalStorageData('blackList', blackList, setBlackList);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+    const loginInput = useSelector((state: { settings: { loginInput: string; }; }) => state.settings.loginInput);
+    const repositoryInput = useSelector((state: { settings: { repositoryInput: string; }; }) => state.settings.repositoryInput);
+    const blacklistInput = useSelector((state: { settings: { blacklistInput: string; }; }) => state.settings.blacklistInput);
+
+    const blacklist = useSelector((state: { blacklist: { blacklist: []; }; }) => state.blacklist.blacklist);
+
+    const dispatch = useDispatch();
 
     function handleLoginInputChange(e: { target: { value: React.SetStateAction<string>; }; }) {
-        setLogin(e.target.value);
-        setLocalStorageData('login', `${e.target.value}`);
+        dispatch({ type: 'settings/loginInputUpdated', payload: e.target.value });
+        setLocalStorageData('loginInput', `${e.target.value}`);
     }
     function handleRepositoryInputChange(e: { target: { value: React.SetStateAction<string>; }; }) {
-        setRepository(e.target.value);
-        setLocalStorageData('repository', `${e.target.value}`);
+        dispatch({ type: 'settings/repositoryInputUpdated', payload: e.target.value });
+        setLocalStorageData('repositoryInput', `${e.target.value}`);
     }
-    function handleBlackListInputChange(e: { target: { value: React.SetStateAction<string>; }; }) {
-        setBlackList(e.target.value);
-        setLocalStorageData('blackList', `${e.target.value}`);
+    function handleBlacklistInputChange(e: { target: { value: React.SetStateAction<string>; }; }) {
+        dispatch({ type: 'settings/blacklistInputUpdated', payload: e.target.value });
+        setLocalStorageData('blacklistInput', `${e.target.value}`);
     }
 
-    function addBlackListItem(reviewerName: string) {
-        if (props.blackListData.some((item) => item === reviewerName)) {
+    function addBlacklistItem(reviewerName: string) {
+        if (blacklist.some((item) => item === reviewerName)) {
             alert('the value already exists');
         } else {
-            props.setBlackListData([...props.blackListData, reviewerName]);
+            const newBlacklist = blacklist.slice();
+            dispatch({ type: 'settings/blacklistChanged', payload: [...newBlacklist, reviewerName] });
             try {
-                localStorage.setItem('blackListData', JSON.stringify([...props.blackListData, reviewerName]));
+                localStorage.setItem('blacklistData', JSON.stringify([...newBlacklist, reviewerName]));
             } catch (error) {
                 alert(error);
                 localStorage.clear();
             }
         }
     }
-
-    function removeBlackListItem(reviewerName: string) {
-        const updateBlackListData = props.blackListData.filter((item: string) => item !== reviewerName);
-        props.setBlackListData(updateBlackListData);
+    function removeBlacklistItem(reviewerName: string) {
+        const updateBlacklist = blacklist.filter((item: string) => item !== reviewerName);
+        dispatch({ type: 'settings/blacklistChanged', payload: updateBlacklist });
         try {
-            localStorage.setItem('blackListData', JSON.stringify(updateBlackListData));
+            localStorage.setItem('blacklistData', JSON.stringify(updateBlacklist));
         } catch (error) {
             alert(error);
             localStorage.clear();
@@ -71,32 +64,52 @@ export default function SearchSettings(props: { blackListData: Array<string>; se
 
     function handleSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault();
-        const requestData: { login: string; repository: string; } = { login, repository };
-        props.getReviewer(requestData);
+        (async () => {
+            const requestData: { loginInput: string; repositoryInput: string; blacklist: []; } = { loginInput, repositoryInput, blacklist };
+            let result = {
+                user: { state: false, data: { login: '', avatar_url: '' }},
+                reviewer: { state: false, data: { login: '', avatar_url: '' }}
+            };
+            try {
+                result = await getResult(requestData);
+            } catch (error) {
+                alert('User or repository not found! Please, repeat the request or change input data.');
+            }
+            if (result.user.state) {
+                dispatch({ type: 'results/userChanged', payload: result.user });
+            } else {
+                dispatch({ type: 'results/userChanged', payload: result.user });
+            }
+            if (result.reviewer.state) {
+                dispatch({ type: 'results/reviewerChanged', payload: result.reviewer });
+            } else {
+                dispatch({ type: 'results/reviewerChanged', payload: result.reviewer });
+            }
+        })();
     }
+    
     const closingTemplate = null;
     const openingTemplate = (
         <div className='search-settings'>
             <SettingInput
                 id='login'
                 label='Login:'
-                value={login}
+                value={loginInput}
                 handleChange={handleLoginInputChange}
             />
             <SettingInput
                 id='repository'
                 label='Repository:'
-                value={repository}
+                value={repositoryInput}
                 handleChange={handleRepositoryInputChange}
             />
-            <BlackListInput
-                label='BlackList:'
-                value={blackList}
-                handleChange={handleBlackListInputChange}
-                blackListData={props.blackListData}
-                setBlackListData={props.setBlackListData}
-                addBlackListItem={addBlackListItem}
-                removeBlackListItem={removeBlackListItem}
+            <BlacklistInput
+                label='Blacklist:'
+                value={blacklistInput}
+                handleChange={handleBlacklistInputChange}
+                blacklist={blacklist}
+                addBlacklistItem={addBlacklistItem}
+                removeBlacklistItem={removeBlacklistItem}
             />
             <button type='submit' className='btn btn__primary btn__lg'>
                 Search
